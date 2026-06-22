@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Paneli</title>
+</head>
+<body>
+
+<h1>📊 Admin Paneli</h1>
+
+<hr>
+
+<h2>📅 Bugün</h2>
+
+<p>
+💰 Toplam Gelir:
+{{ "%.2f"|format(bugun_toplam) }} TL
+</p>
+
+<hr>
+
+<h2>📅 Son 7 Gün</h2>
+
+<p>
+💰 Toplam Gelir:
+{{ "%.2f"|format(hafta_toplam) }} TL
+</p>
+
+<hr>
+
+<h2>📅 Bu Ay</h2>
+
+<p>
+💰 Toplam Gelir:
+{{ "%.2f"|format(ay_toplam) }} TL
+</p>
+
+<hr>
+
+<h2>📈 Tüm Zamanlar</h2>
+
+<p>
+🎱 Toplam Masa Geliri:
+{{ "%.2f"|format(masa_toplam) }} TL
+</p>
+
+<p>
+🥤 Toplam Sipariş Geliri:
+{{ "%.2f"|format(siparis_toplam) }} TL
+</p>
+
+<p>
+💰 Toplam Ciro:
+{{ "%.2f"|format(genel_toplam) }} TL
+</p>
+
+<hr>
+
+<h2>📋 Gelir Kayıtları</h2>
+
+{% for kayit in gelirler %}
+
+<p>
+{{ kayit.tarih.strftime("%d.%m.%Y %H:%M") }}
+-
+{{ kayit.masa_adi }}
+-
+🎱 Masa:
+{{ "%.2f"|format(kayit.masa_ucreti) }} TL
+-
+🥤 Sipariş:
+{{ "%.2f"|format(kayit.siparis_ucreti) }} TL
+-
+💰 Toplam:
+{{ "%.2f"|format(kayit.toplam_ucret) }} TL
+</p>
+
+{% endfor %}
+
+</body>
+</html>
