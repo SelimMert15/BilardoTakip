@@ -1,13 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Admin Paneli</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Paneli</title>
+
+<style>
+
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial, sans-serif;
+    margin:20px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.kart{
+    background:#1e1e1e;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#2c2c2c;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    border:none;
+    border-radius:6px;
+}
+
+button{
+    background:#2196f3;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+hr{
+    margin:30px 0;
+    border:1px solid #333;
+}
+
+.gelir{
+    background:#1e1e1e;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+}
+
+</style>
+
 </head>
 <body>
 
-<h1>📊 Admin Paneli</h1>
+<h1>⚙️ Admin Paneli</h1>
+
+<div class="kart">
+
+<h2>📦 Stok ve Fiyat Yönetimi</h2>
+
+<table>
+
+<tr>
+<th>Ürün</th>
+<th>Stok</th>
+<th>Fiyat (TL)</th>
+<th>Kaydet</th>
+</tr>
+
+{% for urun in urunler %}
+
+<tr>
+
+<form method="POST" action="/stok_guncelle/{{ urun.id }}">
+
+<td>
+{{ urun.isim }}
+</td>
+
+<td>
+
+{% if urun.stok is not none %}
+
+<input
+type="number"
+name="stok"
+value="{{ urun.stok }}"
+>
+
+{% else %}
+
+<input
+type="text"
+name="stok"
+value=""
+placeholder="Takipsiz"
+>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<input
+type="number"
+step="0.01"
+name="fiyat"
+value="{{ urun.fiyat }}"
+required
+>
+
+</td>
+
+<td>
+
+<button type="submit">
+Kaydet
+</button>
+
+</td>
+
+</form>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
 
 <hr>
+
+<div class="kart">
 
 <h2>📅 Bugün</h2>
 
@@ -16,7 +168,9 @@
 {{ "%.2f"|format(bugun_toplam) }} TL
 </p>
 
-<hr>
+</div>
+
+<div class="kart">
 
 <h2>📅 Son 7 Gün</h2>
 
@@ -25,7 +179,9 @@
 {{ "%.2f"|format(hafta_toplam) }} TL
 </p>
 
-<hr>
+</div>
+
+<div class="kart">
 
 <h2>📅 Bu Ay</h2>
 
@@ -34,7 +190,9 @@
 {{ "%.2f"|format(ay_toplam) }} TL
 </p>
 
-<hr>
+</div>
+
+<div class="kart">
 
 <h2>📈 Tüm Zamanlar</h2>
 
@@ -53,28 +211,44 @@
 {{ "%.2f"|format(genel_toplam) }} TL
 </p>
 
+</div>
+
 <hr>
+
+<div class="kart">
 
 <h2>📋 Gelir Kayıtları</h2>
 
 {% for kayit in gelirler %}
 
-<p>
+<div class="gelir">
+
 {{ kayit.tarih.strftime("%d.%m.%Y %H:%M") }}
+
 -
+
 {{ kayit.masa_adi }}
+
 -
+
 🎱 Masa:
 {{ "%.2f"|format(kayit.masa_ucreti) }} TL
+
 -
+
 🥤 Sipariş:
 {{ "%.2f"|format(kayit.siparis_ucreti) }} TL
+
 -
+
 💰 Toplam:
 {{ "%.2f"|format(kayit.toplam_ucret) }} TL
-</p>
+
+</div>
 
 {% endfor %}
+
+</div>
 
 </body>
 </html>
