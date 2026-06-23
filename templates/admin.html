@@ -85,20 +85,20 @@ hr{
 
 <h2>📦 Stok ve Fiyat Yönetimi</h2>
 
+<form method="POST" action="/toplu_stok_kaydet">
+
 <table>
 
 <tr>
 <th>Ürün</th>
 <th>Stok</th>
-<th>Fiyat (TL)</th>
-<th>Kaydet</th>
+<th>Fiyat</th>
+<th>Stok Takibi</th>
 </tr>
 
 {% for urun in urunler %}
 
 <tr>
-
-<form method="POST" action="/stok_guncelle/{{ urun.id }}">
 
 <td>
 {{ urun.isim }}
@@ -106,24 +106,11 @@ hr{
 
 <td>
 
-{% if urun.stok is not none %}
-
 <input
 type="number"
-name="stok"
-value="{{ urun.stok }}"
+name="stok_{{ urun.id }}"
+value="{{ urun.stok if urun.stok is not none else '' }}"
 >
-
-{% else %}
-
-<input
-type="text"
-name="stok"
-value=""
-placeholder="Takipsiz"
->
-
-{% endif %}
 
 </td>
 
@@ -132,28 +119,100 @@ placeholder="Takipsiz"
 <input
 type="number"
 step="0.01"
-name="fiyat"
+name="fiyat_{{ urun.id }}"
 value="{{ urun.fiyat }}"
-required
 >
 
 </td>
 
-<td>
+<td style="text-align:center;">
 
-<button type="submit">
-Kaydet
-</button>
+<input
+type="checkbox"
+name="takip_{{ urun.id }}"
+{% if urun.stok_takibi %}
+checked
+{% endif %}
+>
 
 </td>
-
-</form>
 
 </tr>
 
 {% endfor %}
 
 </table>
+
+<br>
+
+<button type="submit">
+💾 Tüm Değişiklikleri Kaydet
+</button>
+
+</form>
+
+<hr>
+
+<h2>➕ Yeni Ürün Ekle</h2>
+
+<form method="POST" action="/urun_ekle">
+
+<p>
+Ürün Adı
+</p>
+
+<input
+type="text"
+name="isim"
+required
+>
+
+<br><br>
+
+<p>
+Fiyat
+</p>
+
+<input
+type="number"
+step="0.01"
+name="fiyat"
+required
+>
+
+<br><br>
+
+<p>
+Stok
+</p>
+
+<input
+type="number"
+name="stok"
+value="0"
+>
+
+<br><br>
+
+<label>
+
+<input
+type="checkbox"
+name="stok_takibi"
+checked
+>
+
+Stok Takibi Yap
+
+</label>
+
+<br><br>
+
+<button type="submit">
+➕ Ürün Ekle
+</button>
+
+</form>
 
 </div>
 

@@ -426,6 +426,97 @@ def stok_guncelle(urun_id):
     return redirect("/admin")
 
 # ==========================
+# TOPLU STOK KAYDET
+# ==========================
+
+@app.route(
+    "/toplu_stok_kaydet",
+    methods=["POST"]
+)
+def toplu_stok_kaydet():
+
+    urunler = Urun.query.all()
+
+    for urun in urunler:
+
+        stok = request.form.get(
+            f"stok_{urun.id}"
+        )
+
+        fiyat = request.form.get(
+            f"fiyat_{urun.id}"
+        )
+
+        takip = request.form.get(
+            f"takip_{urun.id}"
+        )
+
+        if stok != "" and stok is not None:
+            urun.stok = int(stok)
+
+        if fiyat:
+            urun.fiyat = float(fiyat)
+
+        urun.stok_takibi = (
+            takip == "on"
+        )
+
+        if not urun.stok_takibi:
+            urun.stok = None
+
+    db.session.commit()
+
+    return redirect("/admin")
+
+
+# ==========================
+# YENI URUN EKLE
+# ==========================
+
+@app.route(
+    "/urun_ekle",
+    methods=["POST"]
+)
+def urun_ekle():
+
+    isim = request.form.get(
+        "isim"
+    )
+
+    fiyat = float(
+        request.form.get(
+            "fiyat",
+            0
+        )
+    )
+
+    stok_takibi = (
+        request.form.get(
+            "stok_takibi"
+        ) == "on"
+    )
+
+    stok = request.form.get(
+        "stok"
+    )
+
+    yeni_urun = Urun(
+        isim=isim,
+        fiyat=fiyat,
+        stok=int(stok) if stok_takibi and stok else 0,
+        stok_takibi=stok_takibi,
+        minimum_stok=0
+    )
+
+    db.session.add(
+        yeni_urun
+    )
+
+    db.session.commit()
+
+    return redirect("/admin")
+
+# ==========================
 # CIRO SIFIRLA
 # ==========================
 
