@@ -426,6 +426,39 @@ def stok_guncelle(urun_id):
     return redirect("/admin")
 
 # ==========================
+# CIRO SIFIRLA
+# ==========================
+
+@app.route("/ciro_sifirla_12345")
+def ciro_sifirla():
+
+    GelirKaydi.query.delete()
+
+    db.session.commit()
+
+    return "Tum ciro kayitlari silindi."
+
+@app.route("/masa_isimlerini_guncelle")
+def masa_isimlerini_guncelle():
+
+    masa1 = Masa.query.filter_by(isim="3 Bant 1").first()
+    masa2 = Masa.query.filter_by(isim="3 Bant 2").first()
+    masa3 = Masa.query.filter_by(isim="3 Bant 3").first()
+
+    if masa1:
+        masa1.isim = "Zeki Masa"
+
+    if masa2:
+        masa2.isim = "Platin Masa"
+
+    if masa3:
+        masa3.isim = "Eyüp Mert'in Masası"
+
+    db.session.commit()
+
+    return "Masa isimleri guncellendi."
+
+# ==========================
 # MASA AC
 # ==========================
 
